@@ -1,32 +1,84 @@
 import tkinter as tk
+from abc import ABC, abstractmethod
+
+class Subject(ABC):
+    @abstractmethod
+    def registerObserver(self, observer):
+        pass
+    @abstractmethod
+    def _notifyObservers(self):
+        pass
+
+class Observer(ABC):
+    @abstractmethod
+    def update(self, data):
+        pass
+
+class WindowManager(tk.Tk, Subject):
+    _observers = []
+    def __init__(self):
+        self._window = tk.Tk()
+        self._window.title("Map simulation")
+        self._window.bind("<Configure>", self._on_resize)
+        self._window.geometry("1000x500")
+        self._window.minsize(330,330)
+        self._window.update_idletasks() # For the elements inside window to know window's size from the begining 
+
+    def _on_resize(self,event):
+        self._event = event
+        self._notifyObservers()
+
+    def registerObserver(self, observer):
+        self._observers.append(observer)
+    
+    def _notifyObservers(self):
+        data = ("window", self._event)
+        for observer in self._observers:
+            observer.update(data)
+
+    @property
+    def windowHandle(self):
+        return self._window
 
 class DataBase():
     _data = None
     def __init__(self):
         pass
 
-class MapScreen():
+class MapScreen(Observer):
     _mapScreen = None
     _dataBase = None
     _windowHandle = None
-    def __init__(self, windowHandle, dataBase):
-        self._windowHandle = windowHandle
-        mapScreenHeight = self._windowHandle.winfo_height() - 25*2
-        self._mapScreen = tk.Canvas(windowHandle, background="black",height=mapScreenHeight,width=500)
-        self._mapScreen.place(x=475,y=25)
-        self._mapScreen.create_line((50, 50), (100, 100), width=2, fill='white')
-        self._dataBase = dataBase
-
-class HMI():
     _margin = 25
 
-    def __init__(self, windowHandle,dataBase):
-        self._windowHandle = windowHandle
+    def __init__(self, windowMgr, dataBase):
+        self._windowHandle = windowMgr.windowHandle
+        self._drawMapScreen()
         self._dataBase = dataBase
-        self.drawMapControl()
+        windowMgr.registerObserver(self)
 
-    def drawMapControl(self):
-        self._mapActionsWidth = 107
+    def update(self, data):
+        if data[0] == "window":
+            self._adaptToWindowSize(data[1])
+
+    def _adaptToWindowSize(self,event):
+        self._mapScreen.place(relheight=1 - (2*self._margin/event.height),relwidth=1 -((self._margin+132)/self._windowHandle.winfo_width()))
+    
+    def _drawMapScreen(self):
+        self._mapScreen = tk.Canvas(self._windowHandle, background="black")
+        self._mapScreen.place(y=self._margin, x=132, relheight=1 -(2*self._margin/self._windowHandle.winfo_height()), relwidth=1 -((self._margin+132)/self._windowHandle.winfo_width()))
+
+class HMI(Observer):
+    _margin = 25
+    _mapActionsWidth = 107
+
+    def __init__(self, windowMgr,dataBase):
+        self._windowHandle = windowMgr.windowHandle
+        self._dataBase = dataBase
+        self._drawMapControl()
+        windowMgr.registerObserver(self)
+
+    def _drawMapControl(self):
         self._mapActionsFrame = tk.Frame(self._windowHandle,width=self._mapActionsWidth,bg="lightgray")
         self._mapActionsFrame.place(x=self._margin,y=self._margin, relheight= 1 -(2*self._margin/self._windowHandle.winfo_height()))
 
@@ -68,7 +120,11 @@ class HMI():
         self._buttonZoomOut = tk.Button(zoomFrame,text="-")
         self._buttonZoomOut.place(x=45,y=65)
 
-    def adaptToWindowSize(self,event):
+    def update(self, data):
+        if data[0] == "window":
+            self._adaptToWindowSize(data[1])
+
+    def _adaptToWindowSize(self,event):
         self._mapActionsFrame.place(x=self._margin, y=self._margin,relheight=1 - (2*self._margin/event.height))
 
     def _onClickRotateLeft(self):
@@ -88,30 +144,20 @@ class HMI():
         self._buttonRotateRight1.config(relief=tk.RAISED)
         self._buttonRotateRight2.config(relief=tk.RAISED)
         self._windowHandle.update_idletasks()
-        
-def on_resize(event):
-    hmi.adaptToWindowSize(event)
 
-window = tk.Tk()
-
-window.title("Map simulation")
-window.bind("<Configure>", on_resize)
-window.geometry("1000x500")
-window.minsize(330,330)
-window.update_idletasks() # For the elements inside window to know window's size from the begining 
-
+windowMgr = WindowManager()
 dataBase = DataBase()
-hmi = HMI(window,dataBase)
-mapScreen = MapScreen(window,dataBase)
-window.update_idletasks()
+hmi = HMI(windowMgr,dataBase)
+mapScreen = MapScreen(windowMgr,dataBase)
+windowMgr.windowHandle.update_idletasks()
 
 def on_close():
     global running
     running = False
 
-window.protocol("WM_DELETE_WINDOW", on_close)
+windowMgr.windowHandle.protocol("WM_DELETE_WINDOW", on_close)
 
 running = True
 
-while running:  # It won't still try to execute even after windows is closed
-    window.update()
+while running:  # It won't try to execute anymore after the window is closed
+    windowMgr.windowHandle.update()
