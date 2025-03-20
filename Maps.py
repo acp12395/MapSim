@@ -16,25 +16,24 @@ class Observer(ABC):
 
 class WindowManager(tk.Tk, Subject):
     _observers = []
+    _window = None
     def __init__(self):
         self._window = tk.Tk()
         self._window.title("Map simulation")
         self._window.bind("<Configure>", self._on_resize)
-        self._window.geometry("1000x500")
-        self._window.minsize(330,330)
+        self._window.geometry("742x450")
+        self._window.minsize(742,450)
         self._window.update_idletasks() # For the elements inside window to know window's size from the begining 
 
     def _on_resize(self,event):
-        self._event = event
         self._notifyObservers()
 
     def registerObserver(self, observer):
         self._observers.append(observer)
     
     def _notifyObservers(self):
-        data = ("window", self._event)
         for observer in self._observers:
-            observer.update(data)
+            observer.update("window")
 
     @property
     def windowHandle(self):
@@ -58,25 +57,44 @@ class MapScreen(Observer):
         windowMgr.registerObserver(self)
 
     def update(self, data):
-        if data[0] == "window":
-            self._adaptToWindowSize(data[1])
+        if data == "window":
+            self._adaptToWindowSize()
 
-    def _adaptToWindowSize(self,event):
-        self._mapScreen.place(relheight=1 - (2*self._margin/event.height),relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
+    def _adaptToWindowSize(self):
+        self._mapScreen.place(relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
     
     def _drawMapScreen(self):
         self._mapScreen = tk.Canvas(self._windowHandle, background="black")
-        self._mapScreen.place(y=self._margin, x=332, relheight=1 -(2*self._margin/self._windowHandle.winfo_height()), relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
+        self._mapScreen.place(y=self._margin, x=317, relheight=1 -(2*self._margin/self._windowHandle.winfo_height()), relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
 
 class HMI(Observer):
     _margin = 25
     _mapActionsWidth = 107
+    _addRoadRouteCalcWidth = 185
+    _windowHandle = None
+    _dataBase = None
+    _mapActionsFrame = None
+    _addRoadFrame = None
+    _calculateRouteFrame = None
+    _buttonRotateLeft1 = None
+    _buttonRotateLeft2 = None
+    _buttonRotateRight1 = None
+    _buttonRotateRight2 = None
+    _addRoadFrame = None
+    _from = None
+    _degrees = None
+    _leftRight = None
+    _distance = None
+    _to = None
+    _twoWay = None
+    _calculateRouteFrame = None
 
     def __init__(self, windowMgr,dataBase):
         self._windowHandle = windowMgr.windowHandle
         self._dataBase = dataBase
         self._drawMapControl()
         self._drawAddRoadControl()
+        self._drawRouteCalculator()
         windowMgr.registerObserver(self)
 
     def _drawMapControl(self):
@@ -88,14 +106,14 @@ class HMI(Observer):
         moveMapFrame.place(x=0,y=0)
         labelMoveMap = tk.Label(moveMapFrame,text="Move map",bg="lightgray")
         labelMoveMap.place(x=23,y=0)
-        self._buttonUp = tk.Button(moveMapFrame,text="U")
-        self._buttonUp.place(x=45,y=25)
-        self._buttonLeft = tk.Button(moveMapFrame,text="L")
-        self._buttonLeft.place(x=20,y=45)
-        self._buttonRight = tk.Button(moveMapFrame,text="R")
-        self._buttonRight.place(x=70,y=45)
-        self._buttonDown = tk.Button(moveMapFrame,text="D")
-        self._buttonDown.place(x=45,y=65)
+        buttonMoveUp = tk.Button(moveMapFrame,text="U")
+        buttonMoveUp.place(x=45,y=25)
+        buttonMoveLeft = tk.Button(moveMapFrame,text="L")
+        buttonMoveLeft.place(x=20,y=45)
+        buttonMoveRight = tk.Button(moveMapFrame,text="R")
+        buttonMoveRight.place(x=70,y=45)
+        buttonMoveDown = tk.Button(moveMapFrame,text="D")
+        buttonMoveDown.place(x=45,y=65)
 
         rotateFrameHeight = 70
         rotateMapFrame = tk.Frame(self._mapActionsFrame, width=self._mapActionsWidth-2, height=rotateFrameHeight,bg="lightgray")
@@ -116,16 +134,17 @@ class HMI(Observer):
         zoomFrame.place(x=0,y=moveFrameHeight+rotateFrameHeight)
         labelZoomMap = tk.Label(zoomFrame,text="Zoom",bg="lightgray")
         labelZoomMap.place(x=33,y=0)
-        self._buttonZoomIn = tk.Button(zoomFrame,text="+")
-        self._buttonZoomIn.place(x=44,y=25)
-        self._buttonZoomOut = tk.Button(zoomFrame,text="-")
-        self._buttonZoomOut.place(x=45,y=65)
+        buttonZoomIn = tk.Button(zoomFrame,text="+")
+        buttonZoomIn.place(x=44,y=25)
+        buttonZoomOut = tk.Button(zoomFrame,text="-")
+        buttonZoomOut.place(x=45,y=65)
 
     def _drawAddRoadControl(self):
-        self._addRoadFrame = tk.Frame(self._windowHandle,width=160,bg="lightgray",highlightbackground="black",highlightthickness=1)
-        self._addRoadFrame.place(x=self._margin + self._mapActionsWidth,y=self._margin, relheight= 1 -(2*self._margin/self._windowHandle.winfo_height()))
-        labelAddRoad = tk.Label(self._addRoadFrame,bg="lightgray",text="Add road")
-        labelAddRoad.place(relx=0.35,y=0)
+        self._addRoadFrame = tk.Frame(self._windowHandle,width=185,bg="lightgray",highlightbackground="black",highlightthickness=1)
+        self._addRoadFrame.place(x=self._margin + self._mapActionsWidth,y=self._margin, relheight= (250/400)*(1 -((2*self._margin)/self._windowHandle.winfo_height())))
+
+        buttonAddRoad = tk.Button(self._addRoadFrame,text="Add road")
+        buttonAddRoad.place(relx=0.35,y=3)
         labelFrom = tk.Label(self._addRoadFrame,bg="lightgray", text="From crossing*:")
         labelFrom.place(relx=0.25,y=30)
         self._from = tk.StringVar()
@@ -157,15 +176,49 @@ class HMI(Observer):
         inputTo.place(relx=0.11, y=170)
         labelSeparatedComma = tk.Label(self._addRoadFrame,bg="lightgray",text="* Add streets separated by commas", font=("Yu Gothic UI",7))
         labelSeparatedComma.place(x=5,y=200)
+        self._twoWay = tk.BooleanVar()
+        twoWayCheck = tk.Checkbutton(self._addRoadFrame,bg="lightgray", text="Two-Way Road?",variable=self._twoWay,onvalue=True,offvalue=False)
+        twoWayCheck.place(x=25, y=215)
 
+    def _drawRouteCalculator(self):
+        self._calculateRouteFrame = tk.Frame(self._windowHandle,width=185,bg="lightgray",highlightbackground="black",highlightthickness=1)
+        self._calculateRouteFrame.place(x=self._margin + self._mapActionsWidth,rely= 25/self._windowHandle.winfo_height()+(250/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())), relheight= (150/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())))
+        self._pedestrianAuto = tk.StringVar(value="Auto")
+        pedestrian = tk.Radiobutton(self._calculateRouteFrame,text="Pedestrian",variable=self._pedestrianAuto,value="Pedestrian", bg="lightgray")
+        pedestrian.place(x=20, y=10)
+        auto = tk.Radiobutton(self._calculateRouteFrame,text="Auto",variable=self._pedestrianAuto,value="Auto", bg="lightgray")
+        auto.place(x=110,y=10)
+        buttonUpLeft = tk.Button(self._calculateRouteFrame,text=" ")
+        buttonUpLeft.place(x=10,y=40)
+        buttonUp = tk.Button(self._calculateRouteFrame,text="^")
+        buttonUp.place(x=30,y=40)
+        buttonUpRight = tk.Button(self._calculateRouteFrame,text=" ")
+        buttonUpRight.place(x=55,y=40)
+        buttonLeft = tk.Button(self._calculateRouteFrame,text="<")
+        buttonLeft.place(x=10,y=70)
+        buttonRight = tk.Button(self._calculateRouteFrame,text=">")
+        buttonRight.place(x=50,y=70)
+        buttonDownLeft = tk.Button(self._calculateRouteFrame,text=" ")
+        buttonDownLeft.place(x=10,y=100)
+        buttonDown = tk.Button(self._calculateRouteFrame,text="v")
+        buttonDown.place(x=31,y=100)
+        buttonDownRight = tk.Button(self._calculateRouteFrame,text=" ")
+        buttonDownRight.place(x=55,y=100)
+        buttonOrigin = tk.Button(self._calculateRouteFrame,text="Set origin")
+        buttonOrigin.place(x=80,y=40)
+        buttonDestination = tk.Button(self._calculateRouteFrame,text="Set destination")
+        buttonDestination.place(x=80,y=70)
+        buttonRoute = tk.Button(self._calculateRouteFrame,text="Calculate route")
+        buttonRoute.place(x=80,y=100)
 
     def update(self, data):
-        if data[0] == "window":
-            self._adaptToWindowSize(data[1])
+        if data == "window":
+            self._adaptToWindowSize()
 
-    def _adaptToWindowSize(self,event):
-        self._mapActionsFrame.place(relheight=1 - (2*self._margin/event.height))
-        self._addRoadFrame.place(relheight=1 - (2*self._margin/event.height))
+    def _adaptToWindowSize(self):
+        self._mapActionsFrame.place(relheight=1 - (2*self._margin/self._windowHandle.winfo_height()))
+        self._addRoadFrame.place(relheight= (250/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())))
+        self._calculateRouteFrame.place(rely= 25/self._windowHandle.winfo_height()+(250/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())), relheight= (150/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())))
 
     def _onClickRotateLeft(self):
         self._buttonRotateLeft1.config(relief=tk.SUNKEN)
