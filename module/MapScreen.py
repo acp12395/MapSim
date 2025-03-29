@@ -6,14 +6,12 @@ from .GeometricCalculator import GeometricCalculator
 class MapScreen(Observer):
     _geometricCalc = GeometricCalculator()
     _mapScreen = None
-    _dataBase = None
     _windowHandle = None
     _margin = 25
 
-    def __init__(self, windowMgr, dataBase):
+    def __init__(self, windowMgr):
         self._windowHandle = windowMgr.windowHandle
         self._drawMapScreen()
-        self._dataBase = dataBase
         windowMgr.registerObserver(self)
 
     def update(self, data):

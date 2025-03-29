@@ -7,7 +7,7 @@ class HMI(Observer):
     _mapActionsWidth = 107
     _addRoadRouteCalcWidth = 185
     _windowHandle = None
-    _dataBase = None
+    _coordinator = None
     _mapActionsFrame = None
     _addRoadFrame = None
     _calculateRouteFrame = None
@@ -24,9 +24,9 @@ class HMI(Observer):
     _twoWay = None
     _calculateRouteFrame = None
 
-    def __init__(self, windowMgr,dataBase):
+    def __init__(self, windowMgr, coordinator):
         self._windowHandle = windowMgr.windowHandle
-        self._dataBase = dataBase
+        self._coordinator = coordinator
         self._drawMapControl()
         self._drawAddRoadControl()
         self._drawRouteCalculator()
