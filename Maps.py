@@ -1,3 +1,4 @@
+from module.PositionManager import PositionManager
 from module.DataBase import DataBase
 from module.WindowManager import WindowManager
 from module.MapScreen import MapScreen
@@ -7,7 +8,8 @@ windowMgr = WindowManager()
 dataBase = DataBase()
 hmi = HMI(windowMgr,dataBase)
 mapScreen = MapScreen(windowMgr,dataBase)
-windowMgr.windowHandle.update_idletasks()
+windowMgr.windowHandle.update()
+posMgr = PositionManager(mapScreen)
 
 def on_close():
     global running
