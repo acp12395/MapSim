@@ -1,6 +1,8 @@
+from .StringProcessor import StringProcessor
 from .GeometricCalculator import GeometricCalculator
 
 class Coordinator():
+    _strProcessor = None
     _dataBase = None
     _mapScreen = None
     _geometricCalculator = None
@@ -11,3 +13,4 @@ class Coordinator():
         self._mapScreen = mapScreen
         self._geometricCalculator = GeometricCalculator()
         self._positionMgr = positionMgr
+        self._strProcessor = StringProcessor()
