@@ -12,7 +12,7 @@ class DataBase():
     def initialize(self, start):
         self._data.clear()
         self._data = {start : [[0,0], dict({})]}
-    
+
     def addRoad(self,fromCrossing,toCrossing,toCoords,distance, twoWay, roadName):
         self._data[fromCrossing][1][toCrossing] = [distance, roadName]
         if twoWay:

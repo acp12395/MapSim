@@ -129,8 +129,11 @@ class HMI(Observer):
         self._twoWay = tk.BooleanVar()
         twoWayCheck = tk.Checkbutton(self._addRoadFrame,bg="lightgray", text="Two-Way Road?",variable=self._twoWay,onvalue=True,offvalue=False)
         twoWayCheck.place(x=40, y=188)
-        buttonAddRoad = tk.Button(self._addRoadFrame,text="Add road")
+        buttonAddRoad = tk.Button(self._addRoadFrame,text="Add road", command=self._addRoad)
         buttonAddRoad.place(relx=0.35,y=215)
+
+    def _addRoad(self):
+        self._coordinator.requestAddRoad(self._from.get(),self._to.get(),self._distance.get(),self._degrees.get(),self._leftRight.get(),self._twoWay.get())
 
     def _drawRouteCalculator(self):
         self._calculateRouteFrame = tk.Frame(self._windowHandle,width=185,bg="lightgray",highlightbackground="black",highlightthickness=1)

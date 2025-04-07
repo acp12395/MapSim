@@ -8,6 +8,10 @@ class MapScreen(Observer):
     _mapScreen = None
     _windowHandle = None
     _margin = 25
+    _radius = None
+    _zoom = 1
+    _degrees = 0
+    _origin = [0,0]
 
     def __init__(self, windowMgr):
         self._windowHandle = windowMgr.windowHandle
@@ -20,6 +24,7 @@ class MapScreen(Observer):
 
     def _adaptToWindowSize(self):
         self._mapScreen.place(relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
+        self._radius = self._geometricCalc.hypotenuse(self._mapScreen.winfo_height(),self._mapScreen.winfo_width())
     
     def _drawMapScreen(self):
         self._mapScreen = tk.Canvas(self._windowHandle, background="black")
@@ -40,3 +45,8 @@ class MapScreen(Observer):
         rearRight = self._geometricCalc.rotate(coord, dist,angle+150)
         vertices = [front[0],front[1],rearLeft[0],rearLeft[1],rearRight[0],rearRight[1]]
         self._mapScreen.create_polygon(vertices,fill="red")
+
+    def drawRoad(self, fromCoordinates, toCoordinates):
+        fromCoords = self._mappedCoordinate(fromCoordinates[0],fromCoordinates[1])
+        toCoords = self._mappedCoordinate(toCoordinates[0],toCoordinates[1])
+        self._mapScreen.create_line(fromCoords[0],fromCoords[1],toCoords[0],toCoords[1],fill="white", width=2)
