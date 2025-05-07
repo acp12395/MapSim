@@ -20,7 +20,7 @@ class Coordinator():
         toCrossing = self._strProcessor.prettyString(toCrossing)
         if leftRight == "Right":
             degrees = -1 * degrees
-        if self._dataBase.size == 1:
+        if self._dataBase.size == 0:
             self._dataBase.initialize(fromCrossing)
         fromCoordinates = self._dataBase.getCoordinates(fromCrossing)
         toCoordinates = self._geometricCalculator.rotate(fromCoordinates,distance,self._positionMgr.angle + degrees)

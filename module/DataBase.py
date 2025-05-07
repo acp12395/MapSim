@@ -1,16 +1,19 @@
 class DataBase():
-    _data = None
+    _data = {}
 
     def __init__(self):
-        #{"CrossingName" : [[coordinateX,coordinateY], {"NeighborCrossingName" : [distance, "StreetName"]}]}
-        self._data = {"Start" : [[0,0], {"Start" : [0,"Start"]}]}
+        pass
     
     @property
     def size(self):
         return len(self._data)
     
+    @property
+    def data(self):
+        return self._data
+    
     def initialize(self, start):
-        self._data.clear()
+        #            {"CrossingName" : [[coordinateX,coordinateY], {"NeighborCrossingName" : [distance, "StreetName"]}]}
         self._data = {start : [[0,0], dict({})]}
 
     def addRoad(self,fromCrossing,toCrossing,toCoords,distance, twoWay, roadName):
