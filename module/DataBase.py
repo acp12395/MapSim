@@ -13,8 +13,8 @@ class DataBase():
         return self._data
     
     def initialize(self, start):
-        #            {"CrossingName" : [[coordinateX,coordinateY], {"NeighborCrossingName" : [distance, "StreetName"]}]}
-        self._data = {start : [[0,0], dict({})]}
+        #            {"CrossingName" : [complex(coordinateX,coordinateY), {"NeighborCrossingName" : [distance, "StreetName"]}]}
+        self._data = {start : [complex(0,0), dict({})]}
 
     def addRoad(self,fromCrossing,toCrossing,toCoords,distance, twoWay, roadName):
         self._data[fromCrossing][1][toCrossing] = [distance, roadName]

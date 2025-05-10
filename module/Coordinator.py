@@ -23,11 +23,11 @@ class Coordinator():
         if self._dataBase.size == 0:
             self._dataBase.initialize(fromCrossing)
         fromCoordinates = self._dataBase.getCoordinates(fromCrossing)
-        toCoordinates = self._geometricCalculator.rotate(fromCoordinates,distance,self._positionMgr.angle + degrees)
+        toCoordinates = self._geometricCalculator.rotate(fromCoordinates,fromCoordinates+complex(distance,0),self._positionMgr.angle + degrees)
         streetName = self._getStreetName(fromCrossing, toCrossing)
         self._dataBase.addRoad(fromCrossing,toCrossing,toCoordinates,distance, twoWay,streetName)
         self._mapScreen.drawRoad(fromCoordinates, toCoordinates)
-        self._positionMgr.setPosition(toCoordinates[0], toCoordinates[1], degrees)
+        self._positionMgr.setPosition(toCoordinates, degrees)
     
     def _getStreetName(self, fromCrossing, toCrossing):
         fromSet = self._strProcessor.getWords(fromCrossing)
