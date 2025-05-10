@@ -84,3 +84,13 @@ class Coordinator():
                 toCoord = self._dataBase.data[neighbor][0]
                 self._mapScreen.drawRoad(fromCoord,toCoord)
         self._positionMgr.drawCurrentPosition()
+
+    def rotateLeftMap(self):
+        self._mapScreen.rotateLeft()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def rotateRightMap(self):
+        self._mapScreen.rotateRight()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()

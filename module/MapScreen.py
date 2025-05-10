@@ -69,16 +69,16 @@ class MapScreen(Observer):
         self._imgBottomDraw.circle(nonComplexCoord,10,fill="white")
     
     def _mappedCoordinate(self,coord):
-        rotatedCoord = self._geometricCalc.rotate(self._coordsBottom,coord,self._rotationDegrees)
+        rotatedCoord = self._geometricCalc.rotate(self._coordsBottom,coord,-self._rotationDegrees)
         retCoord = complex(self._imgBottom.width // 2 + ((rotatedCoord.real - self._coordsBottom.real)*self._imgBottomZoom)//1, self._imgBottom.height // 2 - ((rotatedCoord.imag - self._coordsBottom.imag)* self._imgBottomZoom)//1)
         return retCoord
     
     def drawArrow(self,coord,angle):
         mappedCoord = self._mappedCoordinate(coord)
         mappedVertex = mappedCoord + complex(8,0)
-        front = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle)
-        rearLeft = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle-150)
-        rearRight = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle+150)
+        front = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle-self._rotationDegrees)
+        rearLeft = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle-150-self._rotationDegrees)
+        rearRight = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle+150-self._rotationDegrees)
         vertices = [front.real, 2*mappedCoord.imag - front.imag,rearLeft.real,2*mappedCoord.imag - rearLeft.imag,rearRight.real,2*mappedCoord.imag - rearRight.imag]
         self._imgBottomDraw.polygon(vertices,outline="red",fill="red")
 
@@ -220,3 +220,21 @@ class MapScreen(Observer):
     
     def clear(self):
         self._makeImgBottom()
+
+    def rotateLeft(self, magnitude=45):
+        imgCopy = self._imgBottom.copy()
+        for i in range(1,magnitude,2):
+            self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(i))
+            self._displayUpdatedImg()
+        self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(magnitude))
+        self._displayUpdatedImg()
+        self._rotationDegrees = (self._rotationDegrees - magnitude)%360
+
+    def rotateRight(self, magnitude=45):
+        imgCopy = self._imgBottom.copy()
+        for i in range(1,magnitude,2):
+            self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(-i))
+            self._displayUpdatedImg()
+        self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(-magnitude))
+        self._displayUpdatedImg()
+        self._rotationDegrees = (self._rotationDegrees + magnitude)%360

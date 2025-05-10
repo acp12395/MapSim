@@ -167,6 +167,10 @@ class HMI(Observer):
         self._buttonRotateLeft1.config(relief=tk.RAISED)
         self._buttonRotateLeft2.config(relief=tk.RAISED)
         self._windowHandle.update_idletasks()
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.rotateLeftMap()
 
     def _onClickRotateRight(self):
         self._buttonRotateRight1.config(relief=tk.SUNKEN)
@@ -176,6 +180,10 @@ class HMI(Observer):
         self._buttonRotateRight1.config(relief=tk.RAISED)
         self._buttonRotateRight2.config(relief=tk.RAISED)
         self._windowHandle.update_idletasks()
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.rotateRightMap()
 
     def _onClickMoveLeft(self):
         if self._currentPostionMap.get() == "CP":
