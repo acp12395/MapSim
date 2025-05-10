@@ -97,7 +97,7 @@ class MapScreen(Observer):
             self._scrollImgTop("L")
             self._displayUpdatedImg()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(int(-100/self._imgBottomZoom),0)
+        moveCoordinate = complex(-100/self._imgBottomZoom,0)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -107,7 +107,7 @@ class MapScreen(Observer):
             self._scrollImgTop("R")
             self._displayUpdatedImg()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(int(100/self._imgBottomZoom),0)
+        moveCoordinate = complex(100/self._imgBottomZoom,0)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -117,7 +117,7 @@ class MapScreen(Observer):
             self._scrollImgTop("U")
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        moveCoordinate = complex(0,int(-100/self._imgBottomZoom))
+        moveCoordinate = complex(0,-100/self._imgBottomZoom)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
     
@@ -128,7 +128,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(int(-70.71/self._imgBottomZoom),int(-70.71/self._imgBottomZoom))
+        moveCoordinate = complex(-70.71/self._imgBottomZoom,-70.71/self._imgBottomZoom)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -139,7 +139,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(int(70.71/self._imgBottomZoom),int(-70.71/self._imgBottomZoom))
+        moveCoordinate = complex(70.71/self._imgBottomZoom,-70.71/self._imgBottomZoom)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
     
@@ -149,7 +149,7 @@ class MapScreen(Observer):
             self._scrollImgTop("D")
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        moveCoordinate = complex(0,int(100/self._imgBottomZoom))
+        moveCoordinate = complex(0,100/self._imgBottomZoom)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -160,7 +160,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(int(-70.71/self._imgBottomZoom),int(70.71/self._imgBottomZoom))
+        moveCoordinate = complex(-70.71/self._imgBottomZoom,70.71/self._imgBottomZoom)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -171,7 +171,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(int(70.71/self._imgBottomZoom),int(70.71/self._imgBottomZoom))
+        moveCoordinate = complex(70.71/self._imgBottomZoom,70.71/self._imgBottomZoom)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
     

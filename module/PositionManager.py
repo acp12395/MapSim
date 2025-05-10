@@ -6,6 +6,7 @@ class PositionManager():
     def __init__(self, map):
         self._map = map
         self.drawCurrentPosition()
+        self._map.refresh()
 
     @property
     def angle(self):
@@ -14,7 +15,6 @@ class PositionManager():
     def drawCurrentPosition(self):
         self._map.drawCircle(self._coords)
         self._map.drawArrow(self._coords,self._angle)
-        self._map.refresh()
     
     def setPosition(self, coord, angle):
         self._map.drawCircle(self._coords)
