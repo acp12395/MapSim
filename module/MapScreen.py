@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import ImageTk, Image, ImageDraw
+from time import sleep
 
 from .Observer import Observer
 from .GeometricCalculator import GeometricCalculator
@@ -66,8 +67,6 @@ class MapScreen(Observer):
         mappedCoord = self._mappedCoordinate(coord)
         nonComplexCoord = [mappedCoord.real, mappedCoord.imag]
         self._imgBottomDraw.circle(nonComplexCoord,10,fill="white")
-        self._copyBottomToTop()
-        self._displayUpdatedImg()
     
     def _mappedCoordinate(self,coord):
         rotatedCoord = self._geometricCalc.rotate(self._coordsBottom,coord,self._rotationDegrees)
@@ -82,8 +81,6 @@ class MapScreen(Observer):
         rearRight = self._geometricCalc.rotate(mappedCoord,mappedVertex,angle+150)
         vertices = [front.real, 2*mappedCoord.imag - front.imag,rearLeft.real,2*mappedCoord.imag - rearLeft.imag,rearRight.real,2*mappedCoord.imag - rearRight.imag]
         self._imgBottomDraw.polygon(vertices,outline="red",fill="red")
-        self._copyBottomToTop()
-        self._displayUpdatedImg()
 
     def drawRoad(self, fromCoordinates, toCoordinates):
         if self._radius == 0:
@@ -93,5 +90,133 @@ class MapScreen(Observer):
         toCoords = self._mappedCoordinate(toCoordinates)
         vertices = [fromCoords.real,fromCoords.imag,toCoords.real,toCoords.imag]
         self._imgBottomDraw.line(vertices,fill="white", width=2)
+    
+    def moveLeft(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("L")
+            self._displayUpdatedImg()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        moveCoordinate = complex(int(-100/self._imgBottomZoom),0)
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+
+    def moveRight(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("R")
+            self._displayUpdatedImg()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        moveCoordinate = complex(int(100/self._imgBottomZoom),0)
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+
+    def moveUp(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("U")
+            self._displayUpdatedImg()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        moveCoordinate = complex(0,int(-100/self._imgBottomZoom))
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+    
+    def moveUpLeft(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("U_L")
+            self._displayUpdatedImg()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        moveCoordinate = complex(int(-70.71/self._imgBottomZoom),int(-70.71/self._imgBottomZoom))
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+
+    def moveUpRight(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("U_R")
+            self._displayUpdatedImg()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        moveCoordinate = complex(int(70.71/self._imgBottomZoom),int(-70.71/self._imgBottomZoom))
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+    
+    def moveDown(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("D")
+            self._displayUpdatedImg()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        moveCoordinate = complex(0,int(100/self._imgBottomZoom))
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+
+    def moveDownLeft(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("D_L")
+            self._displayUpdatedImg()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        moveCoordinate = complex(int(-70.71/self._imgBottomZoom),int(70.71/self._imgBottomZoom))
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+
+    def moveDownRight(self, magnitude=10):
+        for i in range(magnitude):
+            sleep(0.015)
+            self._scrollImgTop("D_R")
+            self._displayUpdatedImg()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        moveCoordinate = complex(int(70.71/self._imgBottomZoom),int(70.71/self._imgBottomZoom))
+        moveCoordinate = self._mappedMove(moveCoordinate)
+        self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
+    
+    def _mappedMove(self, movingVectorRectangular):
+        mappedOrigin = complex(0,0)
+        movingVectorRectangular = self._geometricCalc.rotate(mappedOrigin,movingVectorRectangular,-self._rotationDegrees)
+        return movingVectorRectangular
+    
+    def _scrollImgTop(self, dir):
+        if dir == "L":
+            dx = 10
+            self._imgTopOffset_X += dx
+        elif dir == "R":
+            dx = -10
+            self._imgTopOffset_X += dx
+        elif dir == "U":
+            dy = 10
+            self._imgTopOffset_Y += dy
+        elif dir == "U_L":
+            dx = 7.071
+            self._imgTopOffset_X += dx
+            dy = 7.071
+            self._imgTopOffset_Y += dy
+        elif dir == "U_R":
+            dx = -7.071
+            self._imgTopOffset_X += dx
+            dy = 7.071
+            self._imgTopOffset_Y += dy
+        elif dir == "D":
+            dy = -10
+            self._imgTopOffset_Y += dy
+        elif dir == "D_L":
+            dx = 7.071
+            self._imgTopOffset_X += dx
+            dy = -7.071
+            self._imgTopOffset_Y += dy
+        elif dir == "D_R":
+            dx = -7.071
+            self._imgTopOffset_X += dx
+            dy = -7.071
+            self._imgTopOffset_Y += dy
+    
+    def refresh(self):
         self._copyBottomToTop()
         self._displayUpdatedImg()
+    
+    def clear(self):
+        self._makeImgBottom()

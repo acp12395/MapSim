@@ -50,21 +50,21 @@ class HMI(Observer):
         moveMapFrame.place(x=0,y=selectorFrameHeight)
         labelMoveMap = tk.Label(moveMapFrame,text="Move",bg="lightgray")
         labelMoveMap.place(x=34,y=0)
-        buttonUpLeft = tk.Button(moveMapFrame,text=" ")
+        buttonUpLeft = tk.Button(moveMapFrame,text=" ",command=self._onClickMoveUpLeft)
         buttonUpLeft.place(x=23,y=25)
-        buttonUp = tk.Button(moveMapFrame,text="^")
+        buttonUp = tk.Button(moveMapFrame,text="^",command=self._onClickMoveUp)
         buttonUp.place(x=43,y=25)
-        buttonUpRight = tk.Button(moveMapFrame,text=" ")
+        buttonUpRight = tk.Button(moveMapFrame,text=" ",command=self._onClickMoveUpRight)
         buttonUpRight.place(x=68,y=25)
-        buttonLeft = tk.Button(moveMapFrame,text="<")
+        buttonLeft = tk.Button(moveMapFrame,text="<",command=self._onClickMoveLeft)
         buttonLeft.place(x=23,y=55)
-        buttonRight = tk.Button(moveMapFrame,text=">")
+        buttonRight = tk.Button(moveMapFrame,text=">",command=self._onClickMoveRight)
         buttonRight.place(x=63,y=55)
-        buttonDownLeft = tk.Button(moveMapFrame,text=" ")
+        buttonDownLeft = tk.Button(moveMapFrame,text=" ",command=self._onClickMoveDownLeft)
         buttonDownLeft.place(x=23,y=85)
-        buttonDown = tk.Button(moveMapFrame,text="v")
+        buttonDown = tk.Button(moveMapFrame,text="v",command=self._onClickMoveDown)
         buttonDown.place(x=44,y=85)
-        buttonDownRight = tk.Button(moveMapFrame,text=" ")
+        buttonDownRight = tk.Button(moveMapFrame,text=" ",command=self._onClickMoveDownRight)
         buttonDownRight.place(x=68,y=85)
 
         rotateFrameHeight = 70
@@ -176,3 +176,51 @@ class HMI(Observer):
         self._buttonRotateRight1.config(relief=tk.RAISED)
         self._buttonRotateRight2.config(relief=tk.RAISED)
         self._windowHandle.update_idletasks()
+
+    def _onClickMoveLeft(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveLeftMap()
+    
+    def _onClickMoveRight(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveRightMap()
+
+    def _onClickMoveUp(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveUpMap()
+    
+    def _onClickMoveUpLeft(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveUpLeftMap()
+
+    def _onClickMoveUpRight(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveUpRightMap()
+
+    def _onClickMoveDown(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveDownMap()
+    
+    def _onClickMoveDownLeft(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveDownLeftMap()
+
+    def _onClickMoveDownRight(self):
+        if self._currentPostionMap.get() == "CP":
+            pass
+        else:
+            self._coordinator.moveDownRightMap()

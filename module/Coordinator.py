@@ -28,8 +28,59 @@ class Coordinator():
         self._dataBase.addRoad(fromCrossing,toCrossing,toCoordinates,distance, twoWay,streetName)
         self._mapScreen.drawRoad(fromCoordinates, toCoordinates)
         self._positionMgr.setPosition(toCoordinates, degrees)
+        self._mapScreen.refresh()
     
     def _getStreetName(self, fromCrossing, toCrossing):
         fromSet = self._strProcessor.getWords(fromCrossing)
         toSet = self._strProcessor.getWords(toCrossing)
         return (fromSet & toSet).pop()
+    
+    def moveLeftMap(self):
+        self._mapScreen.moveLeft()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveRightMap(self):
+        self._mapScreen.moveRight()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveUpMap(self):
+        self._mapScreen.moveUp()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def moveUpLeftMap(self):
+        self._mapScreen.moveUpLeft()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def moveUpRightMap(self):
+        self._mapScreen.moveUpRight()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveDownMap(self):
+        self._mapScreen.moveDown()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def moveDownLeftMap(self):
+        self._mapScreen.moveDownLeft()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def moveDownRightMap(self):
+        self._mapScreen.moveDownRight()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def _drawMapScreenFromScratch(self):
+        self._mapScreen.clear()
+        for node in self._dataBase.data.values():
+            fromCoord = node[0]
+            self._mapScreen.drawCircle(fromCoord)
+            for neighbor in node[1]:
+                toCoord = self._dataBase.data[neighbor][0]
+                self._mapScreen.drawRoad(fromCoord,toCoord)
+        self._positionMgr.drawCurrentPosition()
