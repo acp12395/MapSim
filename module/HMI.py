@@ -86,9 +86,9 @@ class HMI(Observer):
         zoomFrame.place(x=0,rely=0.7)
         labelZoomMap = tk.Label(zoomFrame,text="Zoom",bg="lightgray")
         labelZoomMap.place(x=33,y=0)
-        buttonZoomIn = tk.Button(zoomFrame,text="+")
+        buttonZoomIn = tk.Button(zoomFrame,text="+",command=self._onClickZoomIn)
         buttonZoomIn.place(x=44,y=25)
-        buttonZoomOut = tk.Button(zoomFrame,text="-")
+        buttonZoomOut = tk.Button(zoomFrame,text="-",command=self._onClickZoomOut)
         buttonZoomOut.place(x=45,y=65)
 
     def _drawAddRoadControl(self):
@@ -232,3 +232,9 @@ class HMI(Observer):
             pass
         else:
             self._coordinator.moveDownRightMap()
+            
+    def _onClickZoomIn(self):
+        self._coordinator.zoomInMap()
+
+    def _onClickZoomOut(self):
+        self._coordinator.zoomOutMap()

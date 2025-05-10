@@ -94,3 +94,13 @@ class Coordinator():
         self._mapScreen.rotateRight()
         self._drawMapScreenFromScratch()
         self._mapScreen.refresh()
+
+    def zoomInMap(self):
+        self._mapScreen.zoomIn()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+    
+    def zoomOutMap(self):
+        self._mapScreen.zoomOut()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
