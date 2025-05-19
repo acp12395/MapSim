@@ -7,13 +7,17 @@ class Coordinator():
     _mapScreen = None
     _geometricCalculator = None
     _positionMgr = None
+    _windowHandle = None
+    _rotationDegree = 0
+    _rotating = False
 
-    def __init__(self,dataBase, mapScreen, positionMgr):
+    def __init__(self,dataBase, mapScreen, positionMgr, windowHandle):
         self._dataBase = dataBase
         self._mapScreen = mapScreen
         self._geometricCalculator = GeometricCalculator()
         self._positionMgr = positionMgr
         self._strProcessor = StringProcessor()
+        self._windowHandle = windowHandle
     
     def requestAddRoad(self,fromCrossing,toCrossing,distance,degrees,leftRight,twoWay):
         fromCrossing = self._strProcessor.prettyString(fromCrossing)
@@ -85,15 +89,57 @@ class Coordinator():
                 self._mapScreen.drawRoad(fromCoord,toCoord)
         self._positionMgr.drawCurrentPosition()
 
-    def rotateLeftMap(self):
-        self._mapScreen.rotateLeft()
-        self._drawMapScreenFromScratch()
-        self._mapScreen.refresh()
+    def rotateLeft_Map(self,mode):
+        self._rotating = True
+        if mode == "Long":
+            self._keepRotatingLeft_Map()
+        elif mode == "Quick":
+            self._mapScreen.rotateLeft(mode)
+            self._windowHandle.update_idletasks()
+            self._rotationDegree = 45
+            self.stopLeftRotation_Map()
     
-    def rotateRightMap(self):
-        self._mapScreen.rotateRight()
-        self._drawMapScreenFromScratch()
-        self._mapScreen.refresh()
+    def _keepRotatingLeft_Map(self):
+        if self._rotating:
+            self._rotationDegree = self._rotationDegree + 3
+            self._rotationDegree = self._rotationDegree%360
+            self._mapScreen.rotateLeft(self._rotationDegree)
+            self._windowHandle.update_idletasks()
+            self._windowHandle.after(1,self._keepRotatingLeft_Map)
+    
+    def stopLeftRotation_Map(self):
+        if self._rotating:
+            self._rotating = False
+            self._mapScreen.stopLeftRotation(self._rotationDegree)
+            self._drawMapScreenFromScratch()
+            self._mapScreen.refresh()
+            self._rotationDegree = 0
+    
+    def rotateRight_Map(self,mode):
+        self._rotating = True
+        if mode == "Long":
+            self._keepRotatingRight_Map()
+        elif mode == "Quick":
+            self._mapScreen.rotateRight(mode)
+            self._windowHandle.update_idletasks()
+            self._rotationDegree = 45
+            self.stopRightRotation_Map()
+    
+    def _keepRotatingRight_Map(self):
+        if self._rotating:
+            self._rotationDegree = self._rotationDegree + 3
+            self._rotationDegree = self._rotationDegree%360
+            self._mapScreen.rotateRight(self._rotationDegree)
+            self._windowHandle.update_idletasks()
+            self._windowHandle.after(1,self._keepRotatingRight_Map)
+
+    def stopRightRotation_Map(self):
+        if self._rotating:
+            self._rotating = False
+            self._mapScreen.stopRightRotation(self._rotationDegree)
+            self._drawMapScreenFromScratch()
+            self._mapScreen.refresh()
+            self._rotationDegree = 0
 
     def zoomInMap(self):
         self._mapScreen.zoomIn()

@@ -221,22 +221,32 @@ class MapScreen(Observer):
     def clear(self):
         self._makeImgBottom()
 
-    def rotateLeft(self, magnitude=45):
+    def rotateLeft(self, magnitude):
         imgCopy = self._imgBottom.copy()
-        for i in range(1,magnitude,2):
-            self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(i))
-            self._displayUpdatedImg()
-        self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(magnitude))
+        numericMagnitude = magnitude
+        if magnitude == "Quick":
+            numericMagnitude = 45
+            for i in range(1,numericMagnitude,2):
+                self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(i))
+                self._displayUpdatedImg()
+        self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(numericMagnitude))
         self._displayUpdatedImg()
+
+    def stopLeftRotation(self, magnitude):
         self._rotationDegrees = (self._rotationDegrees - magnitude)%360
 
-    def rotateRight(self, magnitude=45):
+    def rotateRight(self, magnitude):
         imgCopy = self._imgBottom.copy()
-        for i in range(1,magnitude,2):
-            self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(-i))
-            self._displayUpdatedImg()
-        self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(-magnitude))
+        numericMagnitude = magnitude
+        if magnitude == "Quick":
+            numericMagnitude = 45
+            for i in range(1,numericMagnitude,2):
+                self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(-i))
+                self._displayUpdatedImg()
+        self._zoomAdaptedImg = ImageTk.PhotoImage(imgCopy.rotate(-numericMagnitude))
         self._displayUpdatedImg()
+
+    def stopRightRotation(self, magnitude):
         self._rotationDegrees = (self._rotationDegrees + magnitude)%360
 
     def zoomIn(self, magnitude=2):

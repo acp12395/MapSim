@@ -23,6 +23,9 @@ class HMI(Observer):
     _to = None
     _twoWay = None
     _calculateRouteFrame = None
+    _buttonPressed = False
+    _buttonPressedFlavor = "Quick"
+    _busy = False
 
     def __init__(self, windowMgr, coordinator):
         self._windowHandle = windowMgr.windowHandle
@@ -72,14 +75,22 @@ class HMI(Observer):
         rotateMapFrame.place(x=0,y=moveFrameHeight+selectorFrameHeight)
         labelRotateMap = tk.Label(rotateMapFrame,text="Rotate",bg="lightgray")
         labelRotateMap.place(x=31,y=0)
-        self._buttonRotateLeft1 = tk.Button(rotateMapFrame,text="|\nv",command=self._onClickRotateLeft)
+        self._buttonRotateLeft1 = tk.Button(rotateMapFrame,text="|\nv")
         self._buttonRotateLeft1.place(x=10,y=25)
-        self._buttonRotateLeft2 = tk.Button(rotateMapFrame,text="<-",command=self._onClickRotateLeft)
+        self._buttonRotateLeft1.bind('<ButtonPress-1>', self._onClickRotateLeft)
+        self._buttonRotateLeft1.bind('<ButtonRelease-1>', self._onReleaseStopRotateLeft)
+        self._buttonRotateLeft2 = tk.Button(rotateMapFrame,text="<-")
         self._buttonRotateLeft2.place(x=25,y=25)
-        self._buttonRotateRight1 = tk.Button(rotateMapFrame,text="->",command=self._onClickRotateRight)
+        self._buttonRotateLeft2.bind('<ButtonPress-1>', self._onClickRotateLeft)
+        self._buttonRotateLeft2.bind('<ButtonRelease-1>', self._onReleaseStopRotateLeft)
+        self._buttonRotateRight1 = tk.Button(rotateMapFrame,text="->")
         self._buttonRotateRight1.place(x=60,y=25)
-        self._buttonRotateRight2 = tk.Button(rotateMapFrame,text="|\nv",command=self._onClickRotateRight)
+        self._buttonRotateRight1.bind('<ButtonPress-1>', self._onClickRotateRight)
+        self._buttonRotateRight1.bind('<ButtonRelease-1>', self._onReleaseStopRotateRight)
+        self._buttonRotateRight2 = tk.Button(rotateMapFrame,text="|\nv")
         self._buttonRotateRight2.place(x=82,y=25)
+        self._buttonRotateRight2.bind('<ButtonPress-1>', self._onClickRotateRight)
+        self._buttonRotateRight2.bind('<ButtonRelease-1>', self._onReleaseStopRotateRight)
 
         zoomFrameHeight = 95
         zoomFrame = tk.Frame(self._mapActionsFrame, width=self._mapActionsWidth-2, height=zoomFrameHeight,bg="lightgray")
@@ -159,31 +170,81 @@ class HMI(Observer):
         self._addRoadFrame.place(relheight= (250/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())))
         self._calculateRouteFrame.place(rely= 25/self._windowHandle.winfo_height()+(250/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())), relheight= (150/400)*(1 -(2*self._margin/self._windowHandle.winfo_height())))
 
-    def _onClickRotateLeft(self):
+    def _onClickRotateLeft(self, event):
         self._buttonRotateLeft1.config(relief=tk.SUNKEN)
         self._buttonRotateLeft2.config(relief=tk.SUNKEN)
         self._windowHandle.update_idletasks()
-        self._windowHandle.after(100)
+        if not self._busy:
+            self._buttonPressed = True
+            self._windowHandle.after(150,self._rotateLeftSelectMode)
+        
+    def _rotateLeftSelectMode(self):
+        self._busy = True
+        if self._buttonPressed:
+            self._buttonPressedFlavor = "Long"
+            if self._currentPostionMap.get() == "CP":
+                pass
+            else:
+                self._coordinator.rotateLeft_Map(self._buttonPressedFlavor)
+        else:
+            self._buttonPressedFlavor = "Quick"
+            if self._currentPostionMap.get() == "CP":
+                pass
+            else:
+                self._coordinator.rotateLeft_Map(self._buttonPressedFlavor)
+            self._busy = False
+
+    def _onReleaseStopRotateLeft(self, event):
         self._buttonRotateLeft1.config(relief=tk.RAISED)
         self._buttonRotateLeft2.config(relief=tk.RAISED)
         self._windowHandle.update_idletasks()
-        if self._currentPostionMap.get() == "CP":
-            pass
-        else:
-            self._coordinator.rotateLeftMap()
+        if self._buttonPressed:
+            self._buttonPressed = False
+            if self._buttonPressedFlavor == "Long":
+                if self._currentPostionMap.get() == "CP":
+                    pass
+                else:
+                    self._coordinator.stopLeftRotation_Map()
+                self._buttonPressedFlavor = "Quick"
+                self._busy = False
 
-    def _onClickRotateRight(self):
+    def _onClickRotateRight(self, event):
         self._buttonRotateRight1.config(relief=tk.SUNKEN)
         self._buttonRotateRight2.config(relief=tk.SUNKEN)
         self._windowHandle.update_idletasks()
-        self._windowHandle.after(100)
+        if not self._busy:
+            self._buttonPressed = True
+            self._windowHandle.after(150,self._rotateRightSelectMode)
+
+    def _rotateRightSelectMode(self):
+        self._busy = True
+        if self._buttonPressed:
+            self._buttonPressedFlavor = "Long"
+            if self._currentPostionMap.get() == "CP":
+                pass
+            else:
+                self._coordinator.rotateRight_Map(self._buttonPressedFlavor)
+        else:
+            self._buttonPressedFlavor = "Quick"
+            if self._currentPostionMap.get() == "CP":
+                pass
+            else:
+                self._coordinator.rotateRight_Map(self._buttonPressedFlavor)
+            self._busy = False
+
+    def _onReleaseStopRotateRight(self, event):
         self._buttonRotateRight1.config(relief=tk.RAISED)
         self._buttonRotateRight2.config(relief=tk.RAISED)
         self._windowHandle.update_idletasks()
-        if self._currentPostionMap.get() == "CP":
-            pass
-        else:
-            self._coordinator.rotateRightMap()
+        if self._buttonPressed:
+            self._buttonPressed = False
+            if self._buttonPressedFlavor == "Long":
+                if self._currentPostionMap.get() == "CP":
+                    pass
+                else:
+                    self._coordinator.stopRightRotation_Map()
+                self._buttonPressedFlavor = "Quick"
+                self._busy = False
 
     def _onClickMoveLeft(self):
         if self._currentPostionMap.get() == "CP":

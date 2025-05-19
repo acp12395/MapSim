@@ -10,7 +10,7 @@ dataBase = DataBase()
 mapScreen = MapScreen(windowMgr)
 windowMgr.windowHandle.update()
 posMgr = PositionManager(mapScreen)
-coordinator = Coordinator(dataBase, mapScreen, posMgr)
+coordinator = Coordinator(dataBase, mapScreen, posMgr, windowMgr.windowHandle)
 hmi = HMI(windowMgr,coordinator)
 
 def on_close():
@@ -22,4 +22,5 @@ windowMgr.windowHandle.protocol("WM_DELETE_WINDOW", on_close)
 running = True
 
 while running:  # It won't try to execute anymore after the window is closed
+    windowMgr.windowHandle.update_idletasks()
     windowMgr.windowHandle.update()
