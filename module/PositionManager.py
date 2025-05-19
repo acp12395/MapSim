@@ -11,6 +11,11 @@ class PositionManager():
     @property
     def angle(self):
         return self._angle
+    
+    @angle.setter
+    def angle(self, value):
+        self._angle = value
+
 
     def drawCurrentPosition(self):
         self._map.drawCircle(self._coords)

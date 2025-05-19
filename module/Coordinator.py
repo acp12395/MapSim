@@ -114,6 +114,21 @@ class Coordinator():
             self._drawMapScreenFromScratch()
             self._mapScreen.refresh()
             self._rotationDegree = 0
+
+    def rotateLeft_CP(self, mode):
+        self._rotating = True
+        if mode == "Long":
+            self._keepRotatingLeft_CP()
+        elif mode == "Quick":
+            pass
+
+    def _keepRotatingLeft_CP(self):
+        if self._rotating:
+            self._positionMgr.angle = (self._positionMgr.angle + 1)%360
+            self._positionMgr.drawCurrentPosition()
+            self._mapScreen.refresh()
+            self._windowHandle.update_idletasks()
+            self._windowHandle.after(1,self._keepRotatingLeft_CP)
     
     def rotateRight_Map(self,mode):
         self._rotating = True
@@ -140,6 +155,25 @@ class Coordinator():
             self._drawMapScreenFromScratch()
             self._mapScreen.refresh()
             self._rotationDegree = 0
+
+    def rotateRight_CP(self, mode):
+        self._rotating = True
+        if mode == "Long":
+            self._keepRotatingRight_CP()
+        elif mode == "Quick":
+            pass
+
+    def _keepRotatingRight_CP(self):
+        if self._rotating:
+            self._positionMgr.angle = (self._positionMgr.angle - 1)%360
+            self._positionMgr.drawCurrentPosition()
+            self._mapScreen.refresh()
+            self._windowHandle.update_idletasks()
+            self._windowHandle.after(1,self._keepRotatingRight_CP)
+
+    def stopRotation_CP(self):
+        if self._rotating:
+            self._rotating = False
 
     def zoomInMap(self):
         self._mapScreen.zoomIn()

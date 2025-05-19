@@ -183,7 +183,7 @@ class HMI(Observer):
         if self._buttonPressed:
             self._buttonPressedFlavor = "Long"
             if self._currentPostionMap.get() == "CP":
-                pass
+                self._coordinator.rotateLeft_CP(self._buttonPressedFlavor)
             else:
                 self._coordinator.rotateLeft_Map(self._buttonPressedFlavor)
         else:
@@ -202,7 +202,7 @@ class HMI(Observer):
             self._buttonPressed = False
             if self._buttonPressedFlavor == "Long":
                 if self._currentPostionMap.get() == "CP":
-                    pass
+                    self._coordinator.stopRotation_CP()
                 else:
                     self._coordinator.stopLeftRotation_Map()
                 self._buttonPressedFlavor = "Quick"
@@ -221,7 +221,7 @@ class HMI(Observer):
         if self._buttonPressed:
             self._buttonPressedFlavor = "Long"
             if self._currentPostionMap.get() == "CP":
-                pass
+                self._coordinator.rotateRight_CP(self._buttonPressedFlavor)
             else:
                 self._coordinator.rotateRight_Map(self._buttonPressedFlavor)
         else:
@@ -240,7 +240,7 @@ class HMI(Observer):
             self._buttonPressed = False
             if self._buttonPressedFlavor == "Long":
                 if self._currentPostionMap.get() == "CP":
-                    pass
+                    self._coordinator.stopRotation_CP()
                 else:
                     self._coordinator.stopRightRotation_Map()
                 self._buttonPressedFlavor = "Quick"
