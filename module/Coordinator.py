@@ -19,19 +19,17 @@ class Coordinator():
         self._strProcessor = StringProcessor()
         self._windowHandle = windowHandle
     
-    def requestAddRoad(self,fromCrossing,toCrossing,distance,degrees,leftRight,twoWay):
+    def requestAddRoad(self,fromCrossing,toCrossing,distance,twoWay):
         fromCrossing = self._strProcessor.prettyString(fromCrossing)
         toCrossing = self._strProcessor.prettyString(toCrossing)
-        if leftRight == "Right":
-            degrees = -1 * degrees
         if self._dataBase.size == 0:
             self._dataBase.initialize(fromCrossing)
         fromCoordinates = self._dataBase.getCoordinates(fromCrossing)
-        toCoordinates = self._geometricCalculator.rotate(fromCoordinates,fromCoordinates+complex(distance,0),self._positionMgr.angle + degrees)
+        toCoordinates = self._geometricCalculator.rotate(fromCoordinates,fromCoordinates+complex(distance,0),self._positionMgr.angle)
         streetName = self._getStreetName(fromCrossing, toCrossing)
         self._dataBase.addRoad(fromCrossing,toCrossing,toCoordinates,distance, twoWay,streetName)
         self._mapScreen.drawRoad(fromCoordinates, toCoordinates)
-        self._positionMgr.setPosition(toCoordinates, degrees)
+        self._positionMgr.setPosition(toCoordinates)
         self._mapScreen.refresh()
     
     def _getStreetName(self, fromCrossing, toCrossing):

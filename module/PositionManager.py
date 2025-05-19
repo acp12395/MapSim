@@ -21,7 +21,7 @@ class PositionManager():
         self._map.drawCircle(self._coords)
         self._map.drawArrow(self._coords,self._angle)
     
-    def setPosition(self, coord, angle):
+    def setPosition(self, coord, angle=0):
         self._map.drawCircle(self._coords)
         self._coords = coord
         self._angle = self._angle + angle
