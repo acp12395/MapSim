@@ -10,7 +10,7 @@ dataBase = DataBase()
 mapScreen = MapScreen(windowMgr)
 windowMgr.windowHandle.update()
 posMgr = PositionManager(mapScreen)
-coordinator = Coordinator(dataBase, mapScreen, posMgr, windowMgr.windowHandle)
+coordinator = Coordinator(dataBase, mapScreen, posMgr, windowMgr)
 hmi = HMI(windowMgr,coordinator)
 
 def on_close():

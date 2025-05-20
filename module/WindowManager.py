@@ -37,7 +37,7 @@ class WindowManager(Subject):
         self._eventWidth = event.width
         self._eventHeight = event.height
 
-        self._notifyObservers()
+        self._notifyObservers("window")
 
         self._resizing = True
 
@@ -67,11 +67,11 @@ class WindowManager(Subject):
             self._window.geometry(f'{desired_width}x{desired_height}')
             self._window.update_idletasks()
 
-            self._notifyObservers()
+            self._notifyObservers("window-finished")
 
     def registerObserver(self, observer):
         self._observers.append(observer)
     
-    def _notifyObservers(self):
+    def _notifyObservers(self, data):
         for observer in self._observers:
-            observer.update("window")
+            observer.update(data)

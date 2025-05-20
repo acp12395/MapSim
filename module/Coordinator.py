@@ -1,7 +1,8 @@
 from .StringProcessor import StringProcessor
 from .GeometricCalculator import GeometricCalculator
+from .Observer import Observer
 
-class Coordinator():
+class Coordinator(Observer):
     _strProcessor = None
     _dataBase = None
     _mapScreen = None
@@ -11,13 +12,14 @@ class Coordinator():
     _rotationDegree = 0
     _rotating = False
 
-    def __init__(self,dataBase, mapScreen, positionMgr, windowHandle):
+    def __init__(self,dataBase, mapScreen, positionMgr, windowMgr):
         self._dataBase = dataBase
         self._mapScreen = mapScreen
         self._geometricCalculator = GeometricCalculator()
         self._positionMgr = positionMgr
         self._strProcessor = StringProcessor()
-        self._windowHandle = windowHandle
+        self._windowHandle = windowMgr.windowHandle
+        windowMgr.registerObserver(self)
     
     def requestAddRoad(self,fromCrossing,toCrossing,distance,twoWay):
         fromCrossing = self._strProcessor.prettyString(fromCrossing)
@@ -182,3 +184,7 @@ class Coordinator():
         self._mapScreen.zoomOut()
         self._drawMapScreenFromScratch()
         self._mapScreen.refresh()
+    
+    def update(self, data):
+        if data == "window-finished":
+            pass
