@@ -24,3 +24,4 @@ running = True
 while running:  # It won't try to execute anymore after the window is closed
     windowMgr.windowHandle.update_idletasks()
     windowMgr.windowHandle.update()
+    windowMgr.executeExistingResizingTasks()

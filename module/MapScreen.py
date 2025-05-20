@@ -28,7 +28,7 @@ class MapScreen(Observer):
         self._imgTop = tk.Canvas(self._windowHandle, background="black")
         self._imgTopZoom = 1.0
         self._imgTop.place(y=self._margin, x=317, relheight=1 -(2*self._margin/self._windowHandle.winfo_height()), relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
-        self._windowHandle.update()
+        self._windowHandle.update_idletasks()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
     
