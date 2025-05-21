@@ -67,7 +67,7 @@ class WindowManager(Subject):
             self._window.geometry(f'{desired_width}x{desired_height}')
             self._window.update_idletasks()
 
-            self._notifyObservers("window-finished")
+        self._notifyObservers("window-finished")
 
     def registerObserver(self, observer):
         self._observers.append(observer)

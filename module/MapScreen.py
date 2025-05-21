@@ -27,10 +27,7 @@ class MapScreen(Observer):
     def _makeImageTop(self):
         self._imgTop = tk.Canvas(self._windowHandle, background="black")
         self._imgTopZoom = 1.0
-        self._imgTop.place(y=self._margin, x=317, relheight=1 -(2*self._margin/self._windowHandle.winfo_height()), relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
-        self._windowHandle.update_idletasks()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self.adaptToWindowSize()
     
     def _makeImgBottom(self):
         self._imgBottom = Image.new("RGB",(self._imgTop.winfo_width() * 3, self._imgTop.winfo_height() * 3), "black")
@@ -56,12 +53,16 @@ class MapScreen(Observer):
 
     def update(self, data):
         if data == "window":
-            self._adaptToWindowSize()
+            self.adaptToWindowSize()
 
-    def _adaptToWindowSize(self):
-        self._imgTop.place(relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
+    def adaptToWindowSize(self):
+        self._imgTop.place(y=self._margin, x=317,relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
+        self._windowHandle.update_idletasks()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()
         if self._radius != 0:
             self._imgBottomZoom = (self._geometricCalc.hypotenuse(self._imgTop.winfo_width(), self._imgTop.winfo_height())//2) / self._radius
+
 
     def drawCircle(self,coord):
         mappedCoord = self._mappedCoordinate(coord)
@@ -220,6 +221,7 @@ class MapScreen(Observer):
     
     def clear(self):
         self._makeImgBottom()
+        self._adaptImgTopToZoom()
 
     def rotateLeft(self, magnitude):
         imgCopy = self._imgBottom.copy()
