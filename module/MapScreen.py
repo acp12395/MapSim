@@ -87,6 +87,7 @@ class MapScreen(Observer):
         if self._radius == 0:
             self._radius = self._geometricCalc.distance(complex(0,0), toCoordinates) * 2
             self._imgBottomZoom = (self._geometricCalc.hypotenuse(self._imgTop.winfo_width(), self._imgTop.winfo_height())//2) / self._radius
+            self._coordsBottom = self._coordsBottom/self._imgBottomZoom
         fromCoords = self._mappedCoordinate(fromCoordinates)
         toCoords = self._mappedCoordinate(toCoordinates)
         vertices = [fromCoords.real,fromCoords.imag,toCoords.real,toCoords.imag]
