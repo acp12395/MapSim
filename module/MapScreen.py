@@ -53,15 +53,18 @@ class MapScreen(Observer):
 
     def update(self, data):
         if data == "window":
-            self.adaptToWindowSize()
+            self.adaptToWindowSize("calculate-zoom")
 
-    def adaptToWindowSize(self):
+    def adaptToWindowSize(self, command=None):
         self._windowHandle.update_idletasks()
         self._imgTop.place(relx = 1 - (self._windowHandle.winfo_height() - self._margin)/self._windowHandle.winfo_width(), y=self._margin, relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 - (( self._windowHandle.winfo_width() - (self._windowHandle.winfo_height() - self._margin) ) + self._margin)/self._windowHandle.winfo_width())
         self._imgTopOffset_X = -self._imgTop.winfo_width()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         if self._radius != 0:
-            self._imgBottomZoom = (self._geometricCalc.hypotenuse(self._imgTop.winfo_width(), self._imgTop.winfo_height())//2) / self._radius
+            if command == "calculate-zoom":
+                self._imgBottomZoom = (self._geometricCalc.hypotenuse(self._imgTop.winfo_width(), self._imgTop.winfo_height())//2) / self._radius
+            else:
+                self._radius = (self._geometricCalc.hypotenuse(self._imgTop.winfo_width(), self._imgTop.winfo_height())//2) / self._imgBottomZoom
 
 
     def drawCircle(self,coord):
@@ -253,38 +256,40 @@ class MapScreen(Observer):
         self._rotationDegrees = (self._rotationDegrees + magnitude)%360
 
     def zoomIn(self, magnitude=2):
-        magnitude *= self._imgTopZoom
-        while self._imgTopZoom * 1.07 < magnitude:
-            self._imgTopZoom *= 1.07
+        if self._radius != 0:
+            magnitude *= self._imgTopZoom
+            while self._imgTopZoom * 1.07 < magnitude:
+                self._imgTopZoom *= 1.07
+                self._adaptImgTopToZoom()
+                self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
+                self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
+                self._displayUpdatedImg()
+            self._imgTopZoom = magnitude
+            self._imgBottomZoom *= self._imgTopZoom
             self._adaptImgTopToZoom()
             self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
             self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
             self._displayUpdatedImg()
-        self._imgTopZoom = magnitude
-        self._adaptImgTopToZoom()
-        self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
-        self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
-        self._displayUpdatedImg()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        self._imgBottomZoom *= self._imgTopZoom
-        self._imgTopZoom = 1.0
+            self._imgTopOffset_X = -self._imgTop.winfo_width()
+            self._imgTopOffset_Y = -self._imgTop.winfo_height()
+            self._imgTopZoom = 1.0
         
     def zoomOut(self, magnitude=0.5):
-        magnitude *= self._imgTopZoom
-        while self._imgTopZoom * 0.97 > magnitude:
-            sleep(0.01)
-            self._imgTopZoom *= 0.97
+        if self._radius != 0:
+            magnitude *= self._imgTopZoom
+            while self._imgTopZoom * 0.97 > magnitude:
+                sleep(0.01)
+                self._imgTopZoom *= 0.97
+                self._adaptImgTopToZoom()
+                self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
+                self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
+                self._displayUpdatedImg()
+            self._imgTopZoom = magnitude
+            self._imgBottomZoom *= self._imgTopZoom
             self._adaptImgTopToZoom()
             self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
             self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
             self._displayUpdatedImg()
-        self._imgTopZoom = magnitude
-        self._adaptImgTopToZoom()
-        self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
-        self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
-        self._displayUpdatedImg()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        self._imgBottomZoom *= self._imgTopZoom
-        self._imgTopZoom = 1.0
+            self._imgTopOffset_X = -self._imgTop.winfo_width()
+            self._imgTopOffset_Y = -self._imgTop.winfo_height()
+            self._imgTopZoom = 1.0

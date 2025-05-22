@@ -80,7 +80,6 @@ class Coordinator(Observer):
         self._mapScreen.refresh()
     
     def _drawMapScreenFromScratch(self):
-        self._mapScreen.adaptToWindowSize()
         self._mapScreen.clear()
         for node in self._dataBase.data.values():
             fromCoord = node[0]
@@ -178,15 +177,18 @@ class Coordinator(Observer):
 
     def zoomInMap(self):
         self._mapScreen.zoomIn()
+        self._mapScreen.adaptToWindowSize()
         self._drawMapScreenFromScratch()
         self._mapScreen.refresh()
     
     def zoomOutMap(self):
         self._mapScreen.zoomOut()
+        self._mapScreen.adaptToWindowSize()
         self._drawMapScreenFromScratch()
         self._mapScreen.refresh()
     
     def update(self, data):
         if data == "window-finished":
+            self._mapScreen.adaptToWindowSize("calculate-zoom")
             self._drawMapScreenFromScratch()
             self._mapScreen.refresh()
