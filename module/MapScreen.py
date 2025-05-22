@@ -56,8 +56,8 @@ class MapScreen(Observer):
             self.adaptToWindowSize()
 
     def adaptToWindowSize(self):
-        self._imgTop.place(y=self._margin, x=317,relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 -((self._margin+332)/self._windowHandle.winfo_width()))
         self._windowHandle.update_idletasks()
+        self._imgTop.place(relx = 1 - (self._windowHandle.winfo_height() - self._margin)/self._windowHandle.winfo_width(), y=self._margin, relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 - (( self._windowHandle.winfo_width() - (self._windowHandle.winfo_height() - self._margin) ) + self._margin)/self._windowHandle.winfo_width())
         self._imgTopOffset_X = -self._imgTop.winfo_width()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         if self._radius != 0:
