@@ -31,7 +31,7 @@ class MapScreen(Observer):
         self.adaptToWindowSize()
     
     def _makeImgBottom(self):
-        self._imgBottom = Image.new("RGB",(self._imgTop.winfo_width() * 3, self._imgTop.winfo_height() * 3), "black")
+        self._imgBottom = Image.new("RGB",(int(self._imgTop.winfo_width() * 1.5), int(self._imgTop.winfo_height() * 1.5)), "black")
         self._imgBottomDraw = ImageDraw.Draw(self._imgBottom)
         self._zoomAdaptedImg = ImageTk.PhotoImage(self._imgBottom)
     
@@ -61,8 +61,8 @@ class MapScreen(Observer):
         if self._widthPercentageInsideMargin == None:
             self._widthPercentageInsideMargin = (self._windowHandle.winfo_height() - 2*self._margin)/(self._windowHandle.winfo_width() - 2*self._margin)
         self._imgTop.place(relx = 1 - (self._widthPercentageInsideMargin * (1 - 2*self._margin/self._windowHandle.winfo_width())) - self._margin/self._windowHandle.winfo_width(), y=self._margin, relheight= 1 -(2*self._margin/self._windowHandle.winfo_height()),relwidth= self._widthPercentageInsideMargin * (1 - 2*self._margin/self._windowHandle.winfo_width()))
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
         if self._radius != 0:
             if command == "calculate-zoom":
                 self._imgBottomZoom = (self._geometricCalc.hypotenuse(self._imgTop.winfo_width(), self._imgTop.winfo_height())//2) / self._radius
@@ -104,7 +104,7 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("L")
             self._displayUpdatedImg()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
         moveCoordinate = complex(-10*self._imgTop.winfo_width()/(40*self._imgBottomZoom),0)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -114,7 +114,7 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("R")
             self._displayUpdatedImg()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
         moveCoordinate = complex(10*self._imgTop.winfo_width()/(40*self._imgBottomZoom),0)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -124,7 +124,7 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("U")
             self._displayUpdatedImg()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
         moveCoordinate = complex(0,-10*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -134,8 +134,8 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("U_L")
             self._displayUpdatedImg()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
         moveCoordinate = complex(-7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),-7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -145,8 +145,8 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("U_R")
             self._displayUpdatedImg()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
         moveCoordinate = complex(7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),-7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -156,7 +156,7 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("D")
             self._displayUpdatedImg()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
         moveCoordinate = complex(0,10*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -166,8 +166,8 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("D_L")
             self._displayUpdatedImg()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
         moveCoordinate = complex(-7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -177,8 +177,8 @@ class MapScreen(Observer):
             sleep(0.015)
             self._scrollImgTop("D_R")
             self._displayUpdatedImg()
-        self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        self._imgTopOffset_X = -self._imgTop.winfo_width()
+        self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
+        self._imgTopOffset_X = -self._imgTop.winfo_width()//4
         moveCoordinate = complex(7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
@@ -273,8 +273,8 @@ class MapScreen(Observer):
             self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
             self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
             self._displayUpdatedImg()
-            self._imgTopOffset_X = -self._imgTop.winfo_width()
-            self._imgTopOffset_Y = -self._imgTop.winfo_height()
+            self._imgTopOffset_X = -self._imgTop.winfo_width()//4
+            self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
             self._imgTopZoom = 1.0
         
     def zoomOut(self, magnitude=2/3):
@@ -293,6 +293,6 @@ class MapScreen(Observer):
             self._imgTopOffset_X = -(self._zoomAdaptedImg.width()-self._imgTop.winfo_width())/2
             self._imgTopOffset_Y = -(self._zoomAdaptedImg.height()-self._imgTop.winfo_height())/2
             self._displayUpdatedImg()
-            self._imgTopOffset_X = -self._imgTop.winfo_width()
-            self._imgTopOffset_Y = -self._imgTop.winfo_height()
+            self._imgTopOffset_X = -self._imgTop.winfo_width()//4
+            self._imgTopOffset_Y = -self._imgTop.winfo_height()//4
             self._imgTopZoom = 1.0
