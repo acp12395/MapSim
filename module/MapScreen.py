@@ -15,6 +15,7 @@ class MapScreen(Observer):
     _coordsBottom = complex(0,0)
     _rotationDegrees = 0
     _imgBottomZoom = 1.0
+    _widthPercentageInsideMargin = None
 
     def __init__(self, windowMgr):
         self._windowHandle = windowMgr.windowHandle
@@ -57,7 +58,9 @@ class MapScreen(Observer):
 
     def adaptToWindowSize(self, command=None):
         self._windowHandle.update_idletasks()
-        self._imgTop.place(relx = 1 - (self._windowHandle.winfo_height() - self._margin)/self._windowHandle.winfo_width(), y=self._margin, relheight=1 - (2*self._margin/self._windowHandle.winfo_height()),relwidth=1 - (( self._windowHandle.winfo_width() - (self._windowHandle.winfo_height() - self._margin) ) + self._margin)/self._windowHandle.winfo_width())
+        if self._widthPercentageInsideMargin == None:
+            self._widthPercentageInsideMargin = (self._windowHandle.winfo_height() - 2*self._margin)/(self._windowHandle.winfo_width() - 2*self._margin)
+        self._imgTop.place(relx = 1 - (self._widthPercentageInsideMargin * (1 - 2*self._margin/self._windowHandle.winfo_width())) - self._margin/self._windowHandle.winfo_width(), y=self._margin, relheight= 1 -(2*self._margin/self._windowHandle.winfo_height()),relwidth= self._widthPercentageInsideMargin * (1 - 2*self._margin/self._windowHandle.winfo_width()))
         self._imgTopOffset_X = -self._imgTop.winfo_width()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         if self._radius != 0:
