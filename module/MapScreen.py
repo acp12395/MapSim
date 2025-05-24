@@ -105,7 +105,7 @@ class MapScreen(Observer):
             self._scrollImgTop("L")
             self._displayUpdatedImg()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(-100/self._imgBottomZoom,0)
+        moveCoordinate = complex(-10*self._imgTop.winfo_width()/(40*self._imgBottomZoom),0)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -115,7 +115,7 @@ class MapScreen(Observer):
             self._scrollImgTop("R")
             self._displayUpdatedImg()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(100/self._imgBottomZoom,0)
+        moveCoordinate = complex(10*self._imgTop.winfo_width()/(40*self._imgBottomZoom),0)
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -125,10 +125,10 @@ class MapScreen(Observer):
             self._scrollImgTop("U")
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        moveCoordinate = complex(0,-100/self._imgBottomZoom)
+        moveCoordinate = complex(0,-10*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
-    
+
     def moveUpLeft(self, magnitude=10):
         for i in range(magnitude):
             sleep(0.015)
@@ -136,7 +136,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(-70.71/self._imgBottomZoom,-70.71/self._imgBottomZoom)
+        moveCoordinate = complex(-7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),-7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -147,7 +147,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(70.71/self._imgBottomZoom,-70.71/self._imgBottomZoom)
+        moveCoordinate = complex(7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),-7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
     
@@ -157,7 +157,7 @@ class MapScreen(Observer):
             self._scrollImgTop("D")
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
-        moveCoordinate = complex(0,100/self._imgBottomZoom)
+        moveCoordinate = complex(0,10*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -168,7 +168,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(-70.71/self._imgBottomZoom,70.71/self._imgBottomZoom)
+        moveCoordinate = complex(-7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
 
@@ -179,7 +179,7 @@ class MapScreen(Observer):
             self._displayUpdatedImg()
         self._imgTopOffset_Y = -self._imgTop.winfo_height()
         self._imgTopOffset_X = -self._imgTop.winfo_width()
-        moveCoordinate = complex(70.71/self._imgBottomZoom,70.71/self._imgBottomZoom)
+        moveCoordinate = complex(7.071*self._imgTop.winfo_width()/(40*self._imgBottomZoom),7.071*self._imgTop.winfo_height()/(40*self._imgBottomZoom))
         moveCoordinate = self._mappedMove(moveCoordinate)
         self._coordsBottom = complex(self._coordsBottom.real + moveCoordinate.real, self._coordsBottom.imag - moveCoordinate.imag)
     
@@ -190,36 +190,36 @@ class MapScreen(Observer):
     
     def _scrollImgTop(self, dir):
         if dir == "L":
-            dx = 10
+            dx = self._imgTop.winfo_width()/40
             self._imgTopOffset_X += dx
         elif dir == "R":
-            dx = -10
+            dx = -self._imgTop.winfo_width()/40
             self._imgTopOffset_X += dx
         elif dir == "U":
-            dy = 10
+            dy = self._imgTop.winfo_height()/40
             self._imgTopOffset_Y += dy
         elif dir == "U_L":
-            dx = 7.071
+            dx = 0.7071*self._imgTop.winfo_width()/40
             self._imgTopOffset_X += dx
-            dy = 7.071
+            dy = 0.7071*self._imgTop.winfo_height()/40
             self._imgTopOffset_Y += dy
         elif dir == "U_R":
-            dx = -7.071
+            dx = -0.7071*self._imgTop.winfo_width()/40
             self._imgTopOffset_X += dx
-            dy = 7.071
+            dy = 0.7071*self._imgTop.winfo_height()/40
             self._imgTopOffset_Y += dy
         elif dir == "D":
-            dy = -10
+            dy = -self._imgTop.winfo_height()/40
             self._imgTopOffset_Y += dy
         elif dir == "D_L":
-            dx = 7.071
+            dx = 0.7071*self._imgTop.winfo_width()/40
             self._imgTopOffset_X += dx
-            dy = -7.071
+            dy = -0.7071*self._imgTop.winfo_height()/40
             self._imgTopOffset_Y += dy
         elif dir == "D_R":
-            dx = -7.071
+            dx = -0.7071*self._imgTop.winfo_width()/40
             self._imgTopOffset_X += dx
-            dy = -7.071
+            dy = -0.7071*self._imgTop.winfo_height()/40
             self._imgTopOffset_Y += dy
     
     def refresh(self):
