@@ -258,7 +258,7 @@ class MapScreen(Observer):
     def stopRightRotation(self, magnitude):
         self._rotationDegrees = (self._rotationDegrees + magnitude)%360
 
-    def zoomIn(self, magnitude=2):
+    def zoomIn(self, magnitude=1.5):
         if self._radius != 0:
             magnitude *= self._imgTopZoom
             while self._imgTopZoom * 1.07 < magnitude:
@@ -277,7 +277,7 @@ class MapScreen(Observer):
             self._imgTopOffset_Y = -self._imgTop.winfo_height()
             self._imgTopZoom = 1.0
         
-    def zoomOut(self, magnitude=0.5):
+    def zoomOut(self, magnitude=2/3):
         if self._radius != 0:
             magnitude *= self._imgTopZoom
             while self._imgTopZoom * 0.97 > magnitude:
