@@ -24,4 +24,7 @@ class DataBase():
             self._data[toCrossing] = [toCoords, dict({})]
 
     def getCoordinates(self, crossing):
-        return self._data[crossing][0]
+        retVal = None
+        if crossing in self.data:
+            retVal = self._data[crossing][0]
+        return retVal

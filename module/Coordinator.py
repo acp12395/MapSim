@@ -27,7 +27,9 @@ class Coordinator(Observer):
         if self._dataBase.size == 0:
             self._dataBase.initialize(fromCrossing)
         fromCoordinates = self._dataBase.getCoordinates(fromCrossing)
-        toCoordinates = self._geometricCalculator.rotate(fromCoordinates,fromCoordinates+complex(distance,0),self._positionMgr.angle)
+        toCoordinates = self._dataBase.getCoordinates(toCrossing)
+        if toCoordinates == None:
+            toCoordinates = self._geometricCalculator.rotate(fromCoordinates,fromCoordinates+complex(distance,0),self._positionMgr.angle)
         streetName = self._getStreetName(fromCrossing, toCrossing)
         self._dataBase.addRoad(fromCrossing,toCrossing,toCoordinates,distance, twoWay,streetName)
         self._mapScreen.drawRoad(fromCoordinates, toCoordinates)
