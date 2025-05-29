@@ -3,6 +3,7 @@ from math import cos
 from math import pi
 from math import sqrt
 from cmath import phase
+from math import atan
 
 class GeometricCalculator():
     def __init__(self):
@@ -20,10 +21,28 @@ class GeometricCalculator():
         return newPoint + origin
     
     def hypotenuse(self, catA, catB):
-        return int(sqrt(pow(catA,2) + pow(catB,2)))
+        return sqrt(pow(catA,2) + pow(catB,2))
     
     def distance(self, pointA, pointB):
         return self.hypotenuse(abs(pointA.real - pointB.real), abs(pointA.imag - pointB.imag))
     
     def _magnitude(self, point):
         return abs(point)
+
+    def getAngle(self,origin,point):
+        point = point - origin
+        origin = complex(0,0)
+        try:
+            angle = (atan(point.imag/point.real)*180/pi)%360
+        except ZeroDivisionError:
+            if point.imag > 0:
+                angle = 90
+            else:
+                angle = 270
+        if point.real < 0:
+            retAngle = 180 + angle
+        elif point.real > 0:
+            retAngle = 0 + angle
+        else:
+            retAngle = angle
+        return retAngle
