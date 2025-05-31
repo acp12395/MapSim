@@ -29,10 +29,14 @@ class DataBase():
         intermediateNodes.append(toCoords)
         self._insertNodesToRoad(intermediateNodes,fromCrossing,toCrossing,twoWay)
 
-        if twoWay:
-            self._crossingData[toCrossing] = [toCoords, {fromCrossing : [distance,roadName]}]
+        if not toCrossing in self._crossingData:
+            if twoWay:
+                self._crossingData[toCrossing] = [toCoords, {fromCrossing : [distance,roadName]}]
+            else:
+                self._crossingData[toCrossing] = [toCoords, dict({})]
         else:
-            self._crossingData[toCrossing] = [toCoords, dict({})]
+            if twoWay:
+                self._crossingData[toCrossing][1][fromCrossing] = [distance,roadName]
 
     def _insertNodesToRoad(self,nodes,fromCrossing,toCrossing,twoWay):
         for nodeIndex in range(0,len(nodes)):
@@ -66,3 +70,6 @@ class DataBase():
         if crossing in self._crossingData:
             retVal = self._crossingData[crossing][0]
         return retVal
+    
+    def getNeighborNodes(self,coords):
+        return self._neighborNodeData[coords][0] + self._neighborNodeData[coords][1]

@@ -32,8 +32,8 @@ class Coordinator(Observer):
             toCoordinates = self._geometricCalculator.rotate(fromCoordinates,fromCoordinates+complex(distance,0),self._positionMgr.angle)
         streetName = self._getStreetName(fromCrossing, toCrossing)
         self._dataBase.addRoad(fromCrossing,toCrossing,toCoordinates,distance, twoWay,streetName)
-        self._mapScreen.drawRoad(fromCoordinates, toCoordinates)
-        self._positionMgr.setPosition(toCoordinates)
+        self._positionMgr.setCoords(toCoordinates)
+        self._drawMapScreenFromScratch()
         self._mapScreen.refresh()
     
     def _getStreetName(self, fromCrossing, toCrossing):
@@ -78,6 +78,85 @@ class Coordinator(Observer):
     
     def moveDownRightMap(self):
         self._mapScreen.moveDownRight()
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def _goToSuitableNode(self,neighbors,direction):
+        if direction == "R":
+            directionDegrees = 0
+        elif direction == "U_R":
+            directionDegrees = 45
+        elif direction == "U":
+            directionDegrees = 90
+        elif direction == "U_L":
+            directionDegrees = 135
+        elif direction == "L":
+            directionDegrees = 180
+        elif direction == "D_L":
+            directionDegrees = 225
+        elif direction == "D":
+            directionDegrees = 270
+        elif direction == "D_R":
+            directionDegrees = 315
+        directionSuitableDegrees = (directionDegrees + self._mapScreen.rotationDegrees)%360
+        for neighbor in neighbors:
+            if self._geometricCalculator.getAngleDifference(directionSuitableDegrees,self._geometricCalculator.getAngle(self._positionMgr.coords,neighbor[0])) <= 23:
+                self._positionMgr.setCoords(neighbor[0])
+                break
+
+    def moveLeftPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"L")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveRightPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"R")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveUpPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"U")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveUpLeftPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"U_L")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveUpRightPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"U_R")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveDownPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"D")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveDownLeftPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"D_L")
+        self._drawMapScreenFromScratch()
+        self._mapScreen.refresh()
+
+    def moveDownRightPosition(self):
+        currentCoords = self._positionMgr.coords
+        neighborNodes = self._dataBase.getNeighborNodes(currentCoords)
+        self._goToSuitableNode(neighborNodes,"D_R")
         self._drawMapScreenFromScratch()
         self._mapScreen.refresh()
     

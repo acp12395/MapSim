@@ -16,13 +16,13 @@ class PositionManager():
     def angle(self, value):
         self._angle = value
 
+    @property
+    def coords(self):
+        return self._coords
 
     def drawCurrentPosition(self):
         self._map.drawCircle(self._coords)
         self._map.drawArrow(self._coords,self._angle)
-    
-    def setPosition(self, coord, angle=0):
-        self._map.drawCircle(self._coords)
+
+    def setCoords(self,coord):
         self._coords = coord
-        self._angle = self._angle + angle
-        self.drawCurrentPosition()

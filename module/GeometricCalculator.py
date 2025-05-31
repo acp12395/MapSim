@@ -46,3 +46,6 @@ class GeometricCalculator():
         else:
             retAngle = angle
         return retAngle
+
+    def getAngleDifference(self,angleA,angleB):
+        return min((angleA - angleB)%360,(angleB-angleA)%360)

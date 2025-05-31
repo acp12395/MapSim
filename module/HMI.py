@@ -243,49 +243,49 @@ class HMI(Observer):
 
     def _onClickMoveLeft(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveLeftPosition()
         else:
             self._coordinator.moveLeftMap()
     
     def _onClickMoveRight(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveRightPosition()
         else:
             self._coordinator.moveRightMap()
 
     def _onClickMoveUp(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveUpPosition()
         else:
             self._coordinator.moveUpMap()
     
     def _onClickMoveUpLeft(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveUpLeftPosition()
         else:
             self._coordinator.moveUpLeftMap()
 
     def _onClickMoveUpRight(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveUpRightPosition()
         else:
             self._coordinator.moveUpRightMap()
 
     def _onClickMoveDown(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveDownPosition()
         else:
             self._coordinator.moveDownMap()
     
     def _onClickMoveDownLeft(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveDownLeftPosition()
         else:
             self._coordinator.moveDownLeftMap()
 
     def _onClickMoveDownRight(self):
         if self._currentPostionMap.get() == "CP":
-            pass
+            self._coordinator.moveDownRightPosition()
         else:
             self._coordinator.moveDownRightMap()
             

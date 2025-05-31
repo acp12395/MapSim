@@ -11,7 +11,6 @@ class MapScreen(Observer):
     _windowHandle = None
     _margin = 25
     _radius = 0
-    _degrees = 0
     _coordsBottom = complex(0,0)
     _rotationDegrees = 0
     _imgBottomZoom = 1.0
@@ -24,6 +23,10 @@ class MapScreen(Observer):
         self._adaptImgTopToZoom()
         self._displayUpdatedImg()
         windowMgr.registerObserver(self)
+
+    @property
+    def rotationDegrees(self):
+        return self._rotationDegrees
     
     def _makeImageTop(self):
         self._imgTop = tk.Canvas(self._windowHandle, background="black")
