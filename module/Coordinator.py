@@ -201,7 +201,7 @@ class Coordinator(Observer):
         if mode == "Long":
             self._keepRotatingLeft_CP()
         elif mode == "Quick":
-            pass
+            self._rotateLeft45Degrees_CP()
 
     def _keepRotatingLeft_CP(self):
         if self._rotating:
@@ -210,6 +210,13 @@ class Coordinator(Observer):
             self._mapScreen.refresh()
             self._windowHandle.update_idletasks()
             self._windowHandle.after(1,self._keepRotatingLeft_CP)
+    
+    def _rotateLeft45Degrees_CP(self):
+        for i in range(0,45):
+            self._positionMgr.angle = (self._positionMgr.angle + 1)%360
+            self._positionMgr.drawCurrentPosition()
+            self._mapScreen.refresh()
+            self._windowHandle.update_idletasks()
     
     def rotateRight_Map(self,mode):
         self._rotating = True
@@ -242,7 +249,7 @@ class Coordinator(Observer):
         if mode == "Long":
             self._keepRotatingRight_CP()
         elif mode == "Quick":
-            pass
+            self._rotateRight45Degrees_CP()
 
     def _keepRotatingRight_CP(self):
         if self._rotating:
@@ -251,6 +258,13 @@ class Coordinator(Observer):
             self._mapScreen.refresh()
             self._windowHandle.update_idletasks()
             self._windowHandle.after(1,self._keepRotatingRight_CP)
+    
+    def _rotateRight45Degrees_CP(self):
+        for i in range(0,45):
+            self._positionMgr.angle = (self._positionMgr.angle - 1)%360
+            self._positionMgr.drawCurrentPosition()
+            self._mapScreen.refresh()
+            self._windowHandle.update_idletasks()
 
     def stopRotation_CP(self):
         if self._rotating:

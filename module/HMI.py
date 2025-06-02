@@ -184,7 +184,7 @@ class HMI(Observer):
         else:
             self._buttonPressedFlavor = "Quick"
             if self._currentPostionMap.get() == "CP":
-                pass
+                self._coordinator.rotateLeft_CP(self._buttonPressedFlavor)
             else:
                 self._coordinator.rotateLeft_Map(self._buttonPressedFlavor)
             self._busy = False
@@ -222,7 +222,7 @@ class HMI(Observer):
         else:
             self._buttonPressedFlavor = "Quick"
             if self._currentPostionMap.get() == "CP":
-                pass
+                self._coordinator.rotateRight_CP(self._buttonPressedFlavor)
             else:
                 self._coordinator.rotateRight_Map(self._buttonPressedFlavor)
             self._busy = False
